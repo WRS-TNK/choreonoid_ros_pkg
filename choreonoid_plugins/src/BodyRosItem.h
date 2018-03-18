@@ -24,6 +24,7 @@
 #include <image_transport/image_transport.h>
 
 #include <vector>
+#include <fstream>
 
 namespace cnoid {
 
