@@ -34,7 +34,7 @@ Checkout choreonoid\_ros\_pkg
 ```
 $ cd ~/catkin_ws/src
 $ wstool init
-$ wstool set choreonoid_ros_pkg https://github.com/fkanehiro/choreonoid_ros_pkg.git --git -y
+$ wstool set choreonoid_ros_pkg https://github.com/WRS-TNK/choreonoid_ros_pkg.git --git -y
 $ wstool update choreonoid_ros_pkg
 ```
 
