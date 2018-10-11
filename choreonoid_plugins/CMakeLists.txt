@@ -159,7 +159,7 @@ endfunction()
 if(ENABLE_PYTHON)
 
   find_package(PythonLibs 2.7 REQUIRED)
-  include_directories(${PYTHON_INCLUDE_PATH})
+  include_directories(${PYTHON_INCLUDE_PATH} /usr/local/include/python2.7)
   set(CNOID_PYTHON_SUBDIR ${CNOID_PLUGIN_SUBDIR}/python)
 
   function(add_cnoid_python_module)
