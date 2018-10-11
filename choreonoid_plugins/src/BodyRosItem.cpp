@@ -5,6 +5,7 @@
 #include <cnoid/ItemManager>
 #include <cnoid/MessageView>
 #include <ros/console.h>
+#include <geometry_msgs/Point32.h>
 
 using namespace cnoid;
 
@@ -176,13 +177,22 @@ bool BodyRosItem::createSensors(BodyPtr body)
     }
   }
   range_sensor_publishers_.resize(rangeSensors_.size());
+  range_sensor_pc_publishers_.resize(rangeSensors_.size());
   for (size_t i=0; i < rangeSensors_.size(); ++i) {
     if (RangeSensor* sensor = rangeSensors_[i]) {
-      range_sensor_publishers_[i] = rosnode_->advertise<sensor_msgs::LaserScan>(sensor->name(), 1);
-      sensor->sigStateChanged().connect(boost::bind(&BodyRosItem::updateRangeSensor,
-                                                    this, sensor, range_sensor_publishers_[i]));
-      ROS_DEBUG("Create range sensor %s with cycle %f", sensor->name().c_str(), sensor->cycle());
-    }
+      if(sensor->numPitchSamples() > 1){
+        range_sensor_pc_publishers_[i] = rosnode_->advertise<sensor_msgs::PointCloud>(sensor->name(), 1);
+        sensor->sigStateChanged().connect(boost::bind(&BodyRosItem::update3DRangeSensor,
+                                                      this, sensor, range_sensor_pc_publishers_[i]));
+        ROS_DEBUG("Create 3d range sensor %s with cycle %f", sensor->name().c_str(), sensor->cycle());
+      }
+      else{
+        range_sensor_publishers_[i] = rosnode_->advertise<sensor_msgs::LaserScan>(sensor->name(), 1);
+        sensor->sigStateChanged().connect(boost::bind(&BodyRosItem::updateRangeSensor,
+                                                      this, sensor, range_sensor_publishers_[i]));
+        ROS_DEBUG("Create range sensor %s with cycle %f", sensor->name().c_str(), sensor->cycle());
+      }
+    } 
   }
 }
 
@@ -352,10 +362,45 @@ void BodyRosItem::updateRangeSensor(RangeSensor* sensor, ros::Publisher& publish
   }
   range.ranges.resize(sensor->rangeData().size());
   //range.intensities.resize(sensor->rangeData().size());
-  for (size_t j = 0; j < sensor->rangeData().size(); ++j) {
+  // for (size_t j = 0; j < sensor->rangeData().size(); ++j) {
+  for (size_t j = 0; j < sensor->numYawSamples(); ++j) {
     range.ranges[j] = sensor->rangeData()[j];
     //range.intensities[j] = -900000;
   }
+  publisher.publish(range);
+}
+
+void BodyRosItem::update3DRangeSensor(RangeSensor* sensor, ros::Publisher& publisher)
+{
+  sensor_msgs::PointCloud range;
+  // Header Info
+  range.header.stamp.fromSec(controllerTarget->currentTime());
+  range.header.frame_id = sensor->name();
+
+  // Calculate Point Cloud data
+  const int numPitchSamples = sensor->numPitchSamples();
+  const double pitchStep = sensor->pitchStep();
+  const int numYawSamples = sensor->numYawSamples();
+  const double yawStep = sensor->yawStep();
+        
+  for(int pitch=0; pitch < numPitchSamples; ++pitch){
+    const double pitchAngle = pitch * pitchStep - sensor->pitchRange() / 2.0;
+    const double cosPitchAngle = cos(pitchAngle);
+    const int srctop = pitch * numYawSamples;
+            
+    for(int yaw=0; yaw < numYawSamples; ++yaw){
+      const double distance = sensor->rangeData()[srctop + yaw];
+      if(distance <= sensor->maxDistance()){
+        double yawAngle = yaw * yawStep - sensor->yawRange() / 2.0;
+        geometry_msgs::Point32 point;
+        point.x = distance *  cosPitchAngle * sin(-yawAngle);
+        point.y = distance * sin(pitchAngle);
+        point.z = -distance * cosPitchAngle * cos(yawAngle);
+        range.points.push_back(point);
+      }
+    }
+  }
+
   publisher.publish(range);
 }
 
@@ -397,6 +442,10 @@ void BodyRosItem::stop_publish()
     range_sensor_publishers_[i].shutdown();
   }
 
+  for (i = 0; i < range_sensor_pc_publishers_.size(); i++) {
+    range_sensor_pc_publishers_[i].shutdown();
+  }
+  
   return;
 }
 
