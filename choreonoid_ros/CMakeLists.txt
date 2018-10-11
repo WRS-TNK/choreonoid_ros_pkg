@@ -12,22 +12,22 @@ find_package(catkin REQUIRED COMPONENTS mk)
 
 catkin_package(DEPENDS eigen)
 
-execute_process(
-    COMMAND
-    ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}
-    make -f ${PROJECT_SOURCE_DIR}/Makefile.choreonoid INSTALL_DIR=${CATKIN_DEVEL_PREFIX} CMD_SETTING_BUILD_ARGS=${PROJECT_SOURCE_DIR}/setting_build_args.sh installed.choreonoid
-    RESULT_VARIABLE
-    _make_failed
-)
-if (_make_failed)
-  message(FATAL_ERROR "Failed to build choreonoid: ${_make_failed}")
-endif(_make_failed)
+# execute_process(
+#     COMMAND
+#     ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}
+#     make -f ${PROJECT_SOURCE_DIR}/Makefile.choreonoid INSTALL_DIR=${CATKIN_DEVEL_PREFIX} CMD_SETTING_BUILD_ARGS=${PROJECT_SOURCE_DIR}/setting_build_args.sh installed.choreonoid
+#     RESULT_VARIABLE
+#     _make_failed
+# )
+# if (_make_failed)
+#   message(FATAL_ERROR "Failed to build choreonoid: ${_make_failed}")
+# endif(_make_failed)
 
-add_custom_target(clean
-   COMMAND
-   ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}
-   make -f ${PROJECT_SOURCE_DIR}/Makefile.choreonoid INSTALL_DIR=${CATKIN_DEVEL_PREFIX} clean.choreonoid
-)
+# add_custom_target(clean
+#    COMMAND
+#    ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}
+#    make -f ${PROJECT_SOURCE_DIR}/Makefile.choreonoid INSTALL_DIR=${CATKIN_DEVEL_PREFIX} clean.choreonoid
+# )
 
 install(
   DIRECTORY launch model

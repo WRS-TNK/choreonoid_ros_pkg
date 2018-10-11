@@ -17,6 +17,7 @@
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/PointCloud.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/LaserScan.h>
 #include <geometry_msgs/Wrench.h>
@@ -98,6 +99,7 @@ private:
     std::vector<image_transport::Publisher> vision_sensor_publishers_;
     std::vector<ros::Publisher> range_vision_sensor_publishers_;
     std::vector<ros::Publisher> range_sensor_publishers_;
+    std::vector<ros::Publisher> range_sensor_pc_publishers_;
 
     void updateForceSensor(ForceSensor* sensor, ros::Publisher& publisher);
     void updateRateGyroSensor(RateGyroSensor* sensor, ros::Publisher& publisher);
@@ -105,6 +107,7 @@ private:
     void updateVisionSensor(Camera* sensor, image_transport::Publisher& publisher);
     void updateRangeVisionSensor(RangeCamera* sensor, ros::Publisher& publisher);
     void updateRangeSensor(RangeSensor* sensor, ros::Publisher& publisher);
+    void update3DRangeSensor(RangeSensor* sensor, ros::Publisher& publisher);
 
     /**
       @brief Stop publish.
