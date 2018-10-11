@@ -99,7 +99,9 @@ catkin_package(
   camera_info_manager
 )
 
-option(ENABLE_PYTHON "" ON)
+# option(ENABLE_PYTHON "" ON)
+set(ENABLE_PYTHON OFF)
+
 
 if (CMAKE_VERSION VERSION_LESS "3.1")
   if (CMAKE_COMPILER_IS_GNUCXX)
@@ -228,5 +230,5 @@ target_link_libraries(CnoidRosBodyPlugin ${CNOID_LIBRARIES} CnoidBodyPlugin ${ca
 # )
 
 if(ENABLE_PYTHON)
-  # add_subdirectory(src/python)
+  add_subdirectory(src/python)
 endif()
