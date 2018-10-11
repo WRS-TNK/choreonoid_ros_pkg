@@ -212,21 +212,21 @@ target_link_libraries(CnoidRosBodyPlugin ${CNOID_LIBRARIES} CnoidBodyPlugin ${ca
 #   ARCHIVE DESTINATION ${CNOID_PLUGIN_SUBDIR}
 # )
 
-install(
-  DIRECTORY src/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  USE_SOURCE_PERMISSIONS
-  FILES_MATCHING PATTERN "*.h"
-  PATTERN "choreonoid_plugins" EXCLUDE
-  PATTERN "python" EXCLUDE
-)
+# install(
+#   DIRECTORY src/
+#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+#   USE_SOURCE_PERMISSIONS
+#   FILES_MATCHING PATTERN "*.h"
+#   PATTERN "choreonoid_plugins" EXCLUDE
+#   PATTERN "python" EXCLUDE
+# )
 
-install(
-  DIRECTORY test
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-  USE_SOURCE_PERMISSIONS
-)
+# install(
+#   DIRECTORY test
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+#   USE_SOURCE_PERMISSIONS
+# )
 
 if(ENABLE_PYTHON)
-  add_subdirectory(src/python)
+  # add_subdirectory(src/python)
 endif()
