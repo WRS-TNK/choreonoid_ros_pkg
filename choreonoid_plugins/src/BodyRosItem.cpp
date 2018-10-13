@@ -395,7 +395,7 @@ void BodyRosItem::update3DRangeSensor(RangeSensor* sensor, ros::Publisher& publi
         geometry_msgs::Point32 point;
         point.x = distance *  cosPitchAngle * sin(-yawAngle);
         point.y = distance * sin(pitchAngle);
-        point.z = -distance * cosPitchAngle * cos(yawAngle);
+        point.z = -distance * cosPitchAngle * cos(-yawAngle);
         range.points.push_back(point);
       }
     }
