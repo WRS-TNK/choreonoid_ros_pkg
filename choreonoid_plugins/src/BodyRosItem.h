@@ -20,7 +20,7 @@
 #include <sensor_msgs/PointCloud.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/LaserScan.h>
-#include <geometry_msgs/Wrench.h>
+#include <geometry_msgs/WrenchStamped.h>
 
 #include <image_transport/image_transport.h>
 
