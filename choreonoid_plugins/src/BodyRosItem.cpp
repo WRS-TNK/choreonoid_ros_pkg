@@ -69,10 +69,10 @@ void BodyRosItem::doPutProperties(PutPropertyFunction& putProperty)
 bool BodyRosItem::initialize(Target* target)
 {
   if (! target) {
-    MessageView::instance()->putln(MessageView::ERROR, boost::format("Target not found"));
+    MessageView::instance()->putln(MessageView::ERROR, "Target not found");
     return false;
   } else if (! target->body()) {
-    MessageView::instance()->putln(MessageView::ERROR, boost::format("BodyItem not found"));
+    MessageView::instance()->putln(MessageView::ERROR, "BodyItem not found");
     return false;
   }
 
