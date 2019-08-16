@@ -126,8 +126,6 @@ bool BodyRosJointControllerItem::start()
   std::string topic_name;
 
   topic_name                 = control_mode_name_ + "/set_joint_trajectory";
-  ROS_INFO("!!!! subscribe topic name : %s!!!!", topic_name.c_str());
-
   joint_state_subscriber_    = rosnode_->subscribe(
                                           topic_name, 1000, &BodyRosJointControllerItem::receive_message, this);
 
