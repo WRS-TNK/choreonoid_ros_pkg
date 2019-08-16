@@ -8,7 +8,7 @@
 
 #include <cnoid/Item>
 #include <cnoid/Body>
-#include "/home/ryodo/workspace/ROS/wrs_ws/src/choreonoid/src/BodyPlugin/CollisionSeq.h"
+//#include "/home/ryodo/workspace/ROS/wrs_ws/src/choreonoid/src/BodyPlugin/CollisionSeq.h"
 
 #include <cnoid/DyBody>
 #include <cnoid/WorldItem>
