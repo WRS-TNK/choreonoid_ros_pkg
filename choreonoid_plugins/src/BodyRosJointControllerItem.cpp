@@ -7,11 +7,25 @@
 
 using namespace cnoid;
 
+void BodyRosJointControllerItem::initialize(ExtensionManager* ext) { 
+  static bool initialized = false;
+  int argc = 0;
+  char** argv;
+  if (!ros::isInitialized())
+    ros::init(argc, argv, "choreonoid");
+  if (!initialized) {
+    ext->itemManager().registerClass<BodyRosJointControllerItem>("BodyRosJointControllerItem");
+    ext->itemManager().addCreationPanel<BodyRosJointControllerItem>();
+    initialized = true;
+  }
+}
+
+
 BodyRosJointControllerItem::BodyRosJointControllerItem()
   : os(MessageView::instance()->cout())
 {
   controllerTarget         = 0;
-  control_mode_name_       = "";
+  control_mode_name_       = "RobotName";
   has_trajectory_          = false;
 }
 
@@ -20,7 +34,7 @@ BodyRosJointControllerItem::BodyRosJointControllerItem(const BodyRosJointControl
     os(MessageView::instance()->cout())
 {
   controllerTarget         = 0;
-  control_mode_name_       = "";
+  control_mode_name_       = "RobotName";
   has_trajectory_          = false;
 }
 
@@ -75,10 +89,12 @@ bool BodyRosJointControllerItem::initialize(Target* target)
   } else if (! target->body()) {
     MessageView::instance()->putln(MessageView::ERROR, "BodyItem not found");
     return false;
-  } else if (control_mode_name_.empty()) {
-    ROS_ERROR("%s: control_mode_name_ is empty, please report to developer", __PRETTY_FUNCTION__);
+  } else if (target->body()->name() == "") {
+    MessageView::instance()->putln(MessageView::ERROR, "BodyItem name not found");
     return false;
   } else {
+    control_mode_name_ = "/";
+    control_mode_name_ += target->body()->name();
     std::replace(control_mode_name_.begin(), control_mode_name_.end(), '-', '_');
   }
 
@@ -110,6 +126,8 @@ bool BodyRosJointControllerItem::start()
   std::string topic_name;
 
   topic_name                 = control_mode_name_ + "/set_joint_trajectory";
+  ROS_INFO("!!!! subscribe topic name : %s!!!!", topic_name.c_str());
+
   joint_state_subscriber_    = rosnode_->subscribe(
                                           topic_name, 1000, &BodyRosJointControllerItem::receive_message, this);
 
