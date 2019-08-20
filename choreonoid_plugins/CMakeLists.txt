@@ -196,6 +196,7 @@ add_cnoid_plugin(CnoidRosBodyPlugin
   src/RosBodyPlugin.cpp
   src/BodyRosItem.cpp
   src/WorldRosItem.cpp
+  src/BodyRosDiffDriveControllerItem.cpp 
   src/BodyRosJointControllerItem.cpp
   src/BodyRosTorqueControllerItem.cpp
   src/BodyRosHighgainControllerItem.cpp
