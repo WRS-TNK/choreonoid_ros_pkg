@@ -22,15 +22,15 @@ void BodyRosItem::initialize(ExtensionManager* ext) {
   }
 }
 
-BodyRosItem::BodyRosItem()
-  : os(MessageView::instance()->cout())
+BodyRosItem::BodyRosItem() :
+    os(MessageView::instance()->cout())
 {
   controllerTarget = NULL;
   joint_state_update_rate_ = 100.0;
 }
 
-BodyRosItem::BodyRosItem(const BodyRosItem& org)
-  : ControllerItem(org),
+BodyRosItem::BodyRosItem(const BodyRosItem& org) :
+    ControllerItem(org),
     os(MessageView::instance()->cout())
 {
   controllerTarget = NULL;
