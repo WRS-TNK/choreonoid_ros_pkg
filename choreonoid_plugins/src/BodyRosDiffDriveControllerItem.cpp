@@ -124,9 +124,8 @@ bool BodyRosDiffDriveControllerItem::start()
     string name = simulationBody_->name();
     replace(name.begin(), name.end(), '-', '_');
     rosnode_ = shared_ptr<ros::NodeHandle>(new ros::NodeHandle(name));
-    
 
-    twist_subscriber_ = rosnode_->subscribe(name+"/command/velocity", 1, &BodyRosDiffDriveControllerItem::twistCallback, this);
+    twist_subscriber_ = rosnode_->subscribe("/command/velocity", 1, &BodyRosDiffDriveControllerItem::twistCallback, this);
     
     async_ros_spin_.reset(new ros::AsyncSpinner(0));
     async_ros_spin_->start();
