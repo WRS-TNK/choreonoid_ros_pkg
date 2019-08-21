@@ -1,10 +1,4 @@
 #include "BodyRosDiffDriveControllerItem.h"
-#include <cnoid/BodyItem>
-#include <cnoid/Link>
-#include <cnoid/ItemManager>
-#include <cnoid/MessageView>
-#include <ros/console.h>
-#include <geometry_msgs/Twist.h>
 
 using namespace cnoid;
 using namespace std;
