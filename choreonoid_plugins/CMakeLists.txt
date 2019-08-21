@@ -199,6 +199,7 @@ add_cnoid_plugin(CnoidRosBodyPlugin
   src/BodyRosJointControllerItem.cpp
   src/BodyRosTorqueControllerItem.cpp
   src/BodyRosHighgainControllerItem.cpp
+  src/BodyRosDiffDriveControllerItem.cpp 
 )
 
 target_link_libraries(CnoidRosBodyPlugin ${CNOID_LIBRARIES} CnoidBodyPlugin ${catkin_LIBRARIES})
