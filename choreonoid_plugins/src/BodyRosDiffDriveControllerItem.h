@@ -34,12 +34,12 @@ public:
     virtual ~BodyRosDiffDriveControllerItem();
     
     virtual bool initialize(Target* target);
-    virtual bool start();
     virtual double timeStep() const { return timeStep_; };
-    virtual void input();
-    virtual bool control();
-    virtual void output();
+    virtual bool start();
     virtual void stop();
+    virtual void input() { };
+    virtual void output() { };
+    virtual bool control();
 
     const BodyPtr& body() const { return simulationBody_; };
 
@@ -63,6 +63,7 @@ private:
 
     double tread_;
     vector<string> wheel_name_;
+    vector<double> wheel_radius_;
     vector<Link*> track_;
 
     shared_ptr<ros::NodeHandle> rosnode_;
