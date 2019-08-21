@@ -200,13 +200,17 @@ bool BodyRosItem::createSensors(BodyPtr body)
   for (size_t i=0; i < rangeSensors_.size(); ++i) {
     if (RangeSensor* sensor = rangeSensors_[i]) {
       if(sensor->numPitchSamples() > 1){
-        range_sensor_pc_publishers_[i] = rosnode_->advertise<sensor_msgs::PointCloud>(sensor->name(), 1);
+        std::string name = sensor->name();
+        std::replace(name.begin(), name.end(), '-', '_');
+        range_sensor_pc_publishers_[i] = rosnode_->advertise<sensor_msgs::PointCloud>(name + "/point_cloud", 1);
         sensor->sigStateChanged().connect(boost::bind(&BodyRosItem::update3DRangeSensor,
                                                       this, sensor, range_sensor_pc_publishers_[i]));
         ROS_DEBUG("Create 3d range sensor %s with cycle %f", sensor->name().c_str(), sensor->cycle());
       }
       else{
-        range_sensor_publishers_[i] = rosnode_->advertise<sensor_msgs::LaserScan>(sensor->name(), 1);
+        std::string name = sensor->name();
+        std::replace(name.begin(), name.end(), '-', '_');
+        range_sensor_publishers_[i] = rosnode_->advertise<sensor_msgs::LaserScan>(name + "/scan", 1);
         sensor->sigStateChanged().connect(boost::bind(&BodyRosItem::updateRangeSensor,
                                                       this, sensor, range_sensor_publishers_[i]));
         ROS_DEBUG("Create range sensor %s with cycle %f", sensor->name().c_str(), sensor->cycle());
