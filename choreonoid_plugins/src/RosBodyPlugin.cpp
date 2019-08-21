@@ -5,9 +5,9 @@
 
 #include "BodyRosItem.h"
 #include "BodyRosDiffDriveControllerItem.h"
-#include "BodyRosJointControllerItem.h"
 #include "BodyRosTorqueControllerItem.h"
 #include "BodyRosHighgainControllerItem.h"
+#include "BodyRosJointControllerItem.h"
 #include "WorldRosItem.h"
 #include <cnoid/Plugin>
 
@@ -21,8 +21,8 @@ public:
   virtual bool initialize() {
     BodyRosItem::initialize(this);
     BodyRosDiffDriveControllerItem::initialize(this);
-    // BodyRosTorqueControllerItem::initialize(this);
-    // BodyRosHighgainControllerItem::initialize(this);
+    BodyRosTorqueControllerItem::initialize(this);
+    BodyRosHighgainControllerItem::initialize(this);
     WorldRosItem::initialize(this);
     return true;
   }
