@@ -116,6 +116,8 @@ bool BodyRosDiffDriveControllerItem::start()
     rosnode_ = shared_ptr<ros::NodeHandle>(new ros::NodeHandle(name));
 
     twist_subscriber_ = rosnode_->subscribe("/" + name + "/command/velocity", 1, &BodyRosDiffDriveControllerItem::twistCallback, this);
+
+    ROS_INFO("Start to subscribe geometry_msgs::Twist message.");
     
     async_ros_spin_.reset(new ros::AsyncSpinner(0));
     async_ros_spin_->start();
