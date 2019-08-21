@@ -2,15 +2,17 @@
 #define CNOID_ROS_PLUGIN_BODY_ROS_DIFF_DRIVE_CONTROLLER_ITEM_H_INCLUDED
 
 #include <cnoid/ControllerItem>
-#include <cnoid/BasicSensorSimulationHelper>
 #include <cnoid/Body>
+#include <cnoid/BodyItem>
+#include <cnoid/Link>
+#include <cnoid/Archive>
+#include <cnoid/ItemManager>
 #include <cnoid/ItemManager>
 #include <cnoid/MessageView>
-#include <cnoid/Archive>
 #include "exportdecl.h"
 
-
 #include <ros/ros.h>
+#include <ros/console.h>
 #include <geometry_msgs/Twist.h>
 
 #include <vector>
@@ -22,9 +24,9 @@ using namespace std;
 
 namespace cnoid {
 
-  class CNOID_EXPORT BodyRosDiffDriveControllerItem : public ControllerItem
-  {
-  public:
+class CNOID_EXPORT BodyRosDiffDriveControllerItem : public ControllerItem
+{
+public:
     static void initialize(ExtensionManager* ext);
 
     BodyRosDiffDriveControllerItem();
@@ -45,13 +47,13 @@ namespace cnoid {
 
     void setModuleName(const string& name);
 
-  protected:
+protected:
     virtual Item* doDuplicate() const;
     virtual bool store(Archive& archive);
     virtual bool restore(const Archive& archive);
     void doPutProperties(PutPropertyFunction& putProperty);
     
-  private:
+private:
     BodyPtr simulationBody_;
     double timeStep_;
 
@@ -76,7 +78,7 @@ namespace cnoid {
 
     vector<double> calcCMDVel(const double linear, const double angular);
 
-  }; // class BodyRosDiffDriveControllerItem
+}; // class BodyRosDiffDriveControllerItem
 
 typedef ref_ptr<BodyRosDiffDriveControllerItem> BodyRosDiffDriveControllerItemPtr;
 
