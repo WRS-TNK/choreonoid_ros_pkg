@@ -26,12 +26,10 @@ void BodyRosDiffDriveControllerItem::initialize(ExtensionManager* ext)
 BodyRosDiffDriveControllerItem::BodyRosDiffDriveControllerItem() :
     os_(MessageView::instance()->cout())
 {
-    ROS_INFO("YOU ARE HERE");
     wheel_name_.resize(2);
     track_.resize(2);
     tread_ = 0.0;
     controllerTarget_ = NULL;
-    ROS_INFO("YOU ARE END HERE");
 }
 
 BodyRosDiffDriveControllerItem::BodyRosDiffDriveControllerItem(const BodyRosDiffDriveControllerItem& org) :
@@ -82,8 +80,6 @@ void BodyRosDiffDriveControllerItem::doPutProperties(PutPropertyFunction& putPro
 
 bool BodyRosDiffDriveControllerItem::initialize(Target* target)
 {
-
-    ROS_INFO("Initialize start");
     if(!target) {
         MessageView::instance()->putln(MessageView::ERROR, "Target not found");
         return false;
@@ -96,16 +92,12 @@ bool BodyRosDiffDriveControllerItem::initialize(Target* target)
     simulationBody_ = target->body();
     timeStep_ = target->worldTimeStep();
     controlTime_ = target->currentTime();
-
-    ROS_INFO("Initialize end");
     
     return true;
 }
 
 bool BodyRosDiffDriveControllerItem::start()
 {
-
-    ROS_INFO("start start");
     // check if the parameter is initialized
     if(tread_==0.0) {
         MessageView::instance()->putln(MessageView::ERROR, "Put tread value !");
