@@ -1,8 +1,10 @@
 #include "BodyRosDiffDriveControllerItem.h"
 #include <cnoid/BodyItem>
 #include <cnoid/Link>
+#include <cnoid/ItemManager>
 #include <cnoid/MessageView>
 #include <ros/console.h>
+#include <geometry_msgs/Twist.h>
 
 using namespace cnoid;
 using namespace std;
@@ -24,16 +26,20 @@ void BodyRosDiffDriveControllerItem::initialize(ExtensionManager* ext)
 BodyRosDiffDriveControllerItem::BodyRosDiffDriveControllerItem() :
     os_(MessageView::instance()->cout())
 {
+    ROS_INFO("YOU ARE HERE");
+    wheel_name_.resize(2);
+    track_.resize(2);
     tread_ = 0.0;
-    wheel_name_[0] = "";
-    wheel_name_[1] = "";
     controllerTarget_ = NULL;
+    ROS_INFO("YOU ARE END HERE");
 }
 
 BodyRosDiffDriveControllerItem::BodyRosDiffDriveControllerItem(const BodyRosDiffDriveControllerItem& org) :
     ControllerItem(org),
     os_(MessageView::instance()->cout())
 {
+    wheel_name_.resize(2);
+    track_.resize(2);
     tread_ = org.tread_;
     wheel_name_ = org.wheel_name_;
     controllerTarget_ = NULL;
@@ -76,6 +82,8 @@ void BodyRosDiffDriveControllerItem::doPutProperties(PutPropertyFunction& putPro
 
 bool BodyRosDiffDriveControllerItem::initialize(Target* target)
 {
+
+    ROS_INFO("Initialize start");
     if(!target) {
         MessageView::instance()->putln(MessageView::ERROR, "Target not found");
         return false;
@@ -83,7 +91,21 @@ bool BodyRosDiffDriveControllerItem::initialize(Target* target)
         MessageView::instance()->putln(MessageView::ERROR, "BodyItem not found");
         return false;
     }
+    
+    controllerTarget_ = target;
+    simulationBody_ = target->body();
+    timeStep_ = target->worldTimeStep();
+    controlTime_ = target->currentTime();
 
+    ROS_INFO("Initialize end");
+    
+    return true;
+}
+
+bool BodyRosDiffDriveControllerItem::start()
+{
+
+    ROS_INFO("start start");
     // check if the parameter is initialized
     if(tread_==0.0) {
         MessageView::instance()->putln(MessageView::ERROR, "Put tread value !");
@@ -92,24 +114,13 @@ bool BodyRosDiffDriveControllerItem::initialize(Target* target)
         MessageView::instance()->putln(MessageView::ERROR, "Put Wheel Link names !");
         return false;
     }
-
-    
-    controllerTarget_ = target;
-    simulationBody_ = target->body();
-    timeStep_ = target->worldTimeStep();
-    controlTime_ = target->currentTime();
-
-
     for(size_t i=0; i<track_.size(); i++){
         track_[i] = simulationBody_->link(wheel_name_[i].c_str());
         track_[i]->setActuationMode(track_[i]->actuationMode());
     }
-    
-    return true;
-}
 
-bool BodyRosDiffDriveControllerItem::start()
-{
+    
+    
     string name = simulationBody_->name();
     replace(name.begin(), name.end(), '-', '_');
     rosnode_ = shared_ptr<ros::NodeHandle>(new ros::NodeHandle(name));
@@ -161,4 +172,14 @@ bool BodyRosDiffDriveControllerItem::control()
         track_[i]->dq_target() = cmd[i];
 
     return true;
+}
+
+void BodyRosDiffDriveControllerItem::input()
+{
+    
+}
+
+void BodyRosDiffDriveControllerItem::output()
+{
+    
 }
