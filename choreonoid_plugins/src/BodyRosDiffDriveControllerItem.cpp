@@ -1,4 +1,5 @@
 #include "BodyRosDiffDriveControllerItem.h"
+#include <cmath>
 
 using namespace cnoid;
 using namespace std;
@@ -21,8 +22,11 @@ BodyRosDiffDriveControllerItem::BodyRosDiffDriveControllerItem() :
     os_(MessageView::instance()->cout())
 {
     wheel_name_.resize(2);
+    wheel_radius_.resize(2);
     track_.resize(2);
     tread_ = 0.0;
+    wheel_radius_[0] = 0.0;
+    wheel_radius_[1] = 0.0;
     controllerTarget_ = NULL;
 }
 
@@ -31,6 +35,7 @@ BodyRosDiffDriveControllerItem::BodyRosDiffDriveControllerItem(const BodyRosDiff
     os_(MessageView::instance()->cout())
 {
     wheel_name_.resize(2);
+    wheel_radius_.resize(2);
     track_.resize(2);
     tread_ = org.tread_;
     wheel_name_ = org.wheel_name_;
@@ -52,7 +57,9 @@ bool BodyRosDiffDriveControllerItem::store(Archive& archive)
     archive.write("Tread", tread_);
     archive.write("LeftWheelLinkName", wheel_name_[0]);
     archive.write("RightWheelLinkName", wheel_name_[1]);
-
+    archive.write("LeftWheelRadius", wheel_radius_[0]);
+    archive.write("RightWheelRadius", wheel_radius_[1]);
+    
     return true;
 }
 
@@ -61,7 +68,9 @@ bool BodyRosDiffDriveControllerItem::restore(const Archive& archive)
     archive.read("Tread", tread_);
     archive.read("LeftWheelLinkName", wheel_name_[0]);
     archive.read("RightWheelLinkName", wheel_name_[1]);
-
+    archive.read("LeftWheelRadius", wheel_radius_[0]);
+    archive.read("RightWheelRadius", wheel_radius_[1]);
+    
     return true;
 }
 
@@ -70,6 +79,8 @@ void BodyRosDiffDriveControllerItem::doPutProperties(PutPropertyFunction& putPro
     putProperty.min(0.0)("Wheel tread", tread_, changeProperty(tread_));
     putProperty("Left Wheel's Link name", wheel_name_[0], changeProperty(wheel_name_[0]));
     putProperty("Right Wheel's Link name", wheel_name_[1], changeProperty(wheel_name_[1]));
+    putProperty.min(0.0)("Left Wheel's radius", wheel_radius_[0], changeProperty(wheel_radius_[0]));
+    putProperty.min(0.0)("Right Wheel's radius", wheel_radius_[1], changeProperty(wheel_radius_[1]));
 }
 
 bool BodyRosDiffDriveControllerItem::initialize(Target* target)
@@ -152,19 +163,12 @@ bool BodyRosDiffDriveControllerItem::control()
         lock_guard<mutex> lock(twistMutex_);
         cmd = calcCMDVel(cmd_twist_.linear.x, cmd_twist_.angular.z);
     }
-    
-    for(size_t i=0; i<track_.size(); i++)
+
+    for(size_t i=0; i<track_.size(); i++){
+        if(wheel_radius_[0] || wheel_radius_[1])
+            cmd[i] /= wheel_radius_[i]; 
         track_[i]->dq_target() = cmd[i];
+    }
 
     return true;
-}
-
-void BodyRosDiffDriveControllerItem::input()
-{
-    
-}
-
-void BodyRosDiffDriveControllerItem::output()
-{
-    
 }
