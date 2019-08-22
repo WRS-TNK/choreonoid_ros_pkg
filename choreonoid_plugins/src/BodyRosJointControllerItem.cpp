@@ -11,7 +11,7 @@ BodyRosJointControllerItem::BodyRosJointControllerItem()
   : os(MessageView::instance()->cout())
 {
   controllerTarget         = 0;
-  control_mode_name_       = "RobotName";
+  control_mode_name_       = "";
   has_trajectory_          = false;
 }
 
@@ -20,7 +20,7 @@ BodyRosJointControllerItem::BodyRosJointControllerItem(const BodyRosJointControl
     os(MessageView::instance()->cout())
 {
   controllerTarget         = 0;
-  control_mode_name_       = "RobotName";
+  control_mode_name_       = "";
   has_trajectory_          = false;
 }
 
