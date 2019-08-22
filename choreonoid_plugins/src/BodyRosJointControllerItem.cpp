@@ -7,25 +7,11 @@
 
 using namespace cnoid;
 
-void BodyRosJointControllerItem::initialize(ExtensionManager* ext) { 
-  static bool initialized = false;
-  int argc = 0;
-  char** argv;
-  if (!ros::isInitialized())
-    ros::init(argc, argv, "choreonoid");
-  if (!initialized) {
-    ext->itemManager().registerClass<BodyRosJointControllerItem>("BodyRosJointControllerItem");
-    ext->itemManager().addCreationPanel<BodyRosJointControllerItem>();
-    initialized = true;
-  }
-}
-
-
 BodyRosJointControllerItem::BodyRosJointControllerItem()
   : os(MessageView::instance()->cout())
 {
   controllerTarget         = 0;
-  control_mode_name_       = "RobotName";
+  control_mode_name_       = "";
   has_trajectory_          = false;
 }
 
@@ -34,7 +20,7 @@ BodyRosJointControllerItem::BodyRosJointControllerItem(const BodyRosJointControl
     os(MessageView::instance()->cout())
 {
   controllerTarget         = 0;
-  control_mode_name_       = "RobotName";
+  control_mode_name_       = "";
   has_trajectory_          = false;
 }
 
@@ -125,7 +111,7 @@ bool BodyRosJointControllerItem::start()
 
   std::string topic_name;
 
-  topic_name                 = control_mode_name_ + "/set_joint_trajectory";
+  topic_name                 = control_mode_name_ + "/command/joint_trajectory";
   joint_state_subscriber_    = rosnode_->subscribe(
                                           topic_name, 1000, &BodyRosJointControllerItem::receive_message, this);
 
