@@ -126,10 +126,10 @@ void BodyRosHighgainControllerItem::calculate_hg_parameter(
   ROS_DEBUG("joint id %03d (%s): q %f dq %f ddq %f q (current) %f",
             i, joint->name().c_str(), qref, dq, ddq, joint->q());
 
-  joint->q()   = qref;
-  joint->dq()  = dq;
-  joint->ddq() = ddq;
-  qref_[i]     = qref;
+  joint->q_target()   = qref;
+  joint->dq_target()  = dq;
+  joint->ddq()        = ddq;
+  qref_[i]            = qref;
 
   return;
 }
