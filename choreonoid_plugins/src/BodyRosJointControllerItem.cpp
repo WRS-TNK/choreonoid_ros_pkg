@@ -7,20 +7,6 @@
 
 using namespace cnoid;
 
-void BodyRosJointControllerItem::initialize(ExtensionManager* ext) { 
-  static bool initialized = false;
-  int argc = 0;
-  char** argv;
-  if (!ros::isInitialized())
-    ros::init(argc, argv, "choreonoid");
-  if (!initialized) {
-    ext->itemManager().registerClass<BodyRosJointControllerItem>("BodyRosJointControllerItem");
-    ext->itemManager().addCreationPanel<BodyRosJointControllerItem>();
-    initialized = true;
-  }
-}
-
-
 BodyRosJointControllerItem::BodyRosJointControllerItem()
   : os(MessageView::instance()->cout())
 {

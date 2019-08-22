@@ -31,7 +31,6 @@ namespace cnoid {
 class CNOID_EXPORT BodyRosJointControllerItem : public ControllerItem
 {
 public:
-    static void initialize(ExtensionManager* ext);
     /**
       @brief Constructor.
      */
