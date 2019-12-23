@@ -70,15 +70,17 @@ bool BodyRosJointControllerItem::hook_of_start_at_after_creation_rosnode()
 bool BodyRosJointControllerItem::initialize(Target* target)
 {
   if (! target) {
-    MessageView::instance()->putln(MessageView::ERROR, boost::format("Target not found"));
+    MessageView::instance()->putln(MessageView::ERROR, "Target not found");
     return false;
   } else if (! target->body()) {
-    MessageView::instance()->putln(MessageView::ERROR, boost::format("BodyItem not found"));
+    MessageView::instance()->putln(MessageView::ERROR, "BodyItem not found");
     return false;
-  } else if (control_mode_name_.empty()) {
-    ROS_ERROR("%s: control_mode_name_ is empty, please report to developer", __PRETTY_FUNCTION__);
+  } else if (target->body()->name() == "") {
+    MessageView::instance()->putln(MessageView::ERROR, "BodyItem name not found");
     return false;
   } else {
+    control_mode_name_ = "/";
+    control_mode_name_ += target->body()->name();
     std::replace(control_mode_name_.begin(), control_mode_name_.end(), '-', '_');
   }
 
@@ -109,7 +111,7 @@ bool BodyRosJointControllerItem::start()
 
   std::string topic_name;
 
-  topic_name                 = control_mode_name_ + "/set_joint_trajectory";
+  topic_name                 = control_mode_name_ + "/command/joint_trajectory";
   joint_state_subscriber_    = rosnode_->subscribe(
                                           topic_name, 1000, &BodyRosJointControllerItem::receive_message, this);
 

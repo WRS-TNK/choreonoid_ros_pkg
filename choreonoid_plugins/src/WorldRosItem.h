@@ -58,7 +58,7 @@ class CNOID_EXPORT WorldRosSimulatorItemAccessor : public SimulatorItem
 {
 public:
   WorldRosSimulatorItemAccessor() { }
-  CollisionLinkPairListPtr get_collisions() { return getCollisions(); }
+  std::shared_ptr<CollisionLinkPairList> get_collisions() { return getCollisions(); }
   virtual SimulationBody* createSimulationBody(Body* orgBody) { return 0; }
   virtual bool initializeSimulation(const std::vector<SimulationBody*>& simBodies) { return true; }
   virtual bool stepSimulation(const std::vector<SimulationBody*>& activeSimBodies) { return true; }

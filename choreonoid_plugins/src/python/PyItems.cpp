@@ -3,6 +3,7 @@
 */
 
 #include "../BodyRosItem.h"
+#include "../BodyRosDiffDriveControllerItem.h"
 #include "../BodyRosHighgainControllerItem.h"
 #include "../BodyRosTorqueControllerItem.h"
 #include "../WorldRosItem.h"
@@ -18,6 +19,12 @@ void exportItems()
     ;
   implicitly_convertible<BodyRosItemPtr, ItemPtr>();
   PyItemList<BodyRosItem>("BodyRosItemList");
+
+  class_< BodyRosDiffDriveControllerItem, BodyRosDiffDriveControllerItemPtr, bases<Item> >
+    ("BodyRosDiffDriveControllerItem")
+    ;
+  implicitly_convertible<BodyRosDiffDriveControllerItemPtr, ItemPtr>();
+  PyItemList<BodyRosDiffDriveControllerItem>("BodyRosDiffDriveControllerItemList");
 
   class_< BodyRosHighgainControllerItem, BodyRosHighgainControllerItemPtr, bases<Item> >
     ("BodyRosHighgainControllerItem")
