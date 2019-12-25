@@ -54,7 +54,7 @@ protected:
     void doPutProperties(PutPropertyFunction& putProperty);
     
 private:
-    BodyPtr simulationBody_;
+    Body* simulationBody_;
     double timeStep_;
 
     const Target* controllerTarget_;
@@ -77,7 +77,7 @@ private:
 
     void twistCallback(const geometry_msgs::Twist& msg);
 
-    vector<double> calcCMDVel(const double linear, const double angular);
+    void calcCMDVel(vector<double>& result, const double& linear, const double& angular);
 
 }; // class BodyRosDiffDriveControllerItem
 

@@ -147,28 +147,26 @@ void BodyRosDiffDriveControllerItem::twistCallback(const geometry_msgs::Twist& m
     cmd_twist_ = msg;
 }
 
-vector<double> BodyRosDiffDriveControllerItem::calcCMDVel(const double linear, const double angular)
+void BodyRosDiffDriveControllerItem::calcCMDVel(vector<double>& result, const double& linear, const double& angular)
 {
-    vector<double> result(2,0);
     result[0] = linear - (tread_/2.0)*angular;
     result[1] = linear + (tread_/2.0)*angular;
-
-    return result;            
 }
 
 bool BodyRosDiffDriveControllerItem::control()
 {
     vector<double> cmd(2);
     {
-        lock_guard<mutex> lock(twistMutex_);
-        cmd = calcCMDVel(cmd_twist_.linear.x, cmd_twist_.angular.z);
+      lock_guard<mutex> lock(twistMutex_);
+      calcCMDVel(cmd, cmd_twist_.linear.x, cmd_twist_.angular.z);
     }
-
     for(size_t i=0; i<track_.size(); i++){
-        if(wheel_radius_[0] || wheel_radius_[1])
-            cmd[i] /= wheel_radius_[i]; 
-        track_[i]->dq_target() = cmd[i];
+      track_[i]->u() = 0;
+      track_[i]->dq() = 0;
+      if(wheel_radius_[i])
+        cmd[i] /= wheel_radius_[i]; 
+      track_[i]->dq_target() = cmd[i];
     }
 
-    return true;
+  return true;
 }
