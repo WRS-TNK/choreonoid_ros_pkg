@@ -1,4 +1,5 @@
 #include "BodyRosItem.h"
+#include <cnoid/PutPropertyFunction>
 #include <cnoid/BodyItem>
 #include <cnoid/Link>
 #include <cnoid/Sensor>

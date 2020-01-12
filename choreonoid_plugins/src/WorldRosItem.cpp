@@ -7,6 +7,7 @@
 #include "BodyRosItem.h"
 
 #include <cnoid/BodyItem>
+#include <cnoid/PutPropertyFunction>
 #include <cnoid/RootItem>
 #include <cnoid/Link>
 #include <cnoid/Sensor>
