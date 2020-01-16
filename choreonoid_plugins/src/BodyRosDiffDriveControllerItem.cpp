@@ -1,4 +1,5 @@
 #include "BodyRosDiffDriveControllerItem.h"
+#include <cnoid/PutPropertyFunction>
 #include <cmath>
 
 using namespace cnoid;

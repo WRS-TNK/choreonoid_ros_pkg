@@ -4,6 +4,7 @@
  */
 
 #include "BodyRosTorqueControllerItem.h"
+#include <cnoid/PutPropertyFunction>
 
 using namespace cnoid;
 

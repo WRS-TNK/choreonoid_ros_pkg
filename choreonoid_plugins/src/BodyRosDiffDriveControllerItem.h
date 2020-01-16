@@ -7,7 +7,6 @@
 #include <cnoid/Link>
 #include <cnoid/Archive>
 #include <cnoid/ItemManager>
-#include <cnoid/ItemManager>
 #include <cnoid/MessageView>
 #include "exportdecl.h"
 
