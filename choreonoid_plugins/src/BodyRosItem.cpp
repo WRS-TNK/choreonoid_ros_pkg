@@ -89,13 +89,13 @@ bool BodyRosItem::start()
 {
   // buffer of preserve currently state of joints.
   joint_state_.header.stamp.fromSec(controlTime_);
-  joint_state_.name.resize(body()->numJoints());
-  joint_state_.position.resize(body()->numJoints());
-  joint_state_.velocity.resize(body()->numJoints());
-  joint_state_.effort.resize(body()->numJoints());
+  joint_state_.name.resize(body()->numAllJoints());
+  joint_state_.position.resize(body()->numAllJoints());
+  joint_state_.velocity.resize(body()->numAllJoints());
+  joint_state_.effort.resize(body()->numAllJoints());
 
   // preserve initial state of joints.
-  for (size_t i = 0; i < body()->numJoints(); i++) {
+  for (size_t i = 0; i < body()->numAllJoints(); i++) {
     Link* joint = body()->joint(i);
 
     joint_state_.name[i]     = joint->name();
@@ -229,7 +229,7 @@ bool BodyRosItem::control()
     // publish current joint states
     joint_state_.header.stamp.fromSec(controlTime_);
 
-    for (int i = 0; i < body()->numJoints(); i++) {
+    for (int i = 0; i < body()->numAllJoints(); i++) {
       Link* joint = body()->joint(i);
 
       joint_state_.position[i] = joint->q();
